@@ -11,6 +11,20 @@ layout: default
 <h1>Links</h1>
 <p>Hier habe ich meine ganzen Links hinzugefügt!</p>
 
+<!-- Discord Button -->
+<a href="https://discord.gg/VDF5PbkfyW" target="_blank" class="button discord">🌐 Discord beitreten</a>
+
+<!-- YouTube Button -->
+<a href="https://youtube.com/@sirgamebot680" target="_blank" class="button youtube">📺 YouTube-Kanal</a>
+
+<!-- Dark Mode Button -->
+<button id="darkModeToggle" class="dark-mode-button">🌙 Dark Mode</button>
+
+<!-- Besucherzähler -->
+<div class="visitor-counter">
+    Besucher: <span id="visitCount">0</span>
+</div>
+
 <!-- Gästebuch -->
 <h2>Eure Kommentare</h2>
 
@@ -27,6 +41,40 @@ layout: default
 
 <style>
     /* Button-Design */
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        margin: 10px;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    /* Discord & YouTube Button Farben */
+    .discord {
+        background-color: #5865F2; /* Discord-Blau */
+    }
+    .youtube {
+        background-color: #FF0000; /* YouTube-Rot */
+    }
+
+    /* Button Animation (Schwebender Effekt) */
+    .button:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+
+    /* Dark Mode Styling */
+    body.dark {
+        background-color: #121212;
+        color: white;
+    }
+
+    /* Dark Mode Button-Styling */
     .dark-mode-button {
         padding: 10px 10px;
         border: none;
@@ -37,9 +85,29 @@ layout: default
         font-size: 14px;
         transition: transform 0.2s, opacity 0.2s;
     }
+
+    /* Dark Mode Button Animation */
     .dark-mode-button:hover {
         opacity: 0.8;
-        transform: scale(1.05);
+        transform: scale(1.1);
+    }
+
+    /* Besucherzähler Styling */
+    .visitor-counter {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    /* Dark Mode für Besucherzähler */
+    body.dark .visitor-counter {
+        background: rgba(255, 255, 255, 0.8);
+        color: black;
     }
 
     /* Gästebuch Container */
@@ -97,22 +165,40 @@ layout: default
         display: none; /* Standard: Löschen ist nicht sichtbar */
     }
 
-    /* Dark Mode Anpassungen */
-    body.dark .guestbook-container {
-        background: rgba(255, 255, 255, 0.1);
-    }
-    body.dark .guestbook-box {
-        background: #222;
-        color: white;
-    }
-    body.dark .comment {
-        background: #333;
-        color: white;
-    }
 </style>
 
 <script>
-    // Kommentare speichern und laden
+    // Dark Mode Toggle
+    const button = document.getElementById("darkModeToggle");
+    const body = document.body;
+
+    if (localStorage.getItem("darkMode") === "enabled") {
+        body.classList.add("dark");
+        button.innerHTML = "☀️ Light Mode";
+    }
+
+    button.addEventListener("click", () => {
+        if (body.classList.contains("dark")) {
+            body.classList.remove("dark");
+            button.innerHTML = "🌙 Dark Mode";
+            localStorage.setItem("darkMode", "disabled");
+        } else {
+            body.classList.add("dark");
+            button.innerHTML = "☀️ Light Mode";
+            localStorage.setItem("darkMode", "enabled");
+        }
+    });
+
+    // Besucherzähler
+    let visitCount = localStorage.getItem("visitCount");
+    if (visitCount === null) {
+        visitCount = 0;
+    }
+    visitCount++;
+    localStorage.setItem("visitCount", visitCount);
+    document.getElementById("visitCount").textContent = visitCount;
+
+    // Gästebuch-Funktion
     function saveComment() {
         const name = document.getElementById("nameInput").value.trim();
         const comment = document.getElementById("commentInput").value.trim();
@@ -121,13 +207,11 @@ layout: default
             return;
         }
 
-        const date = new Date();
-        const formattedDate = date.toLocaleString(); // Datum & Zeit
+        const date = new Date().toLocaleString();
+        const newComment = { name, comment, date };
 
-        const newComment = { name, comment, date: formattedDate };
         let comments = JSON.parse(localStorage.getItem("comments")) || [];
         comments.push(newComment);
-        comments.sort((a, b) => new Date(b.date) - new Date(a.date)); // Neueste zuerst
         localStorage.setItem("comments", JSON.stringify(comments));
 
         document.getElementById("nameInput").value = "";
@@ -136,7 +220,6 @@ layout: default
         loadComments();
     }
 
-    // Kommentare laden
     function loadComments() {
         const commentsBox = document.getElementById("commentsBox");
         commentsBox.innerHTML = "";
@@ -148,7 +231,6 @@ layout: default
             commentDiv.innerHTML = `<strong>${c.name}</strong> - ${c.date}<br>${c.comment} 
                 <button class="delete-button" onclick="deleteComment(${index})">❌</button>`;
 
-            // Falls Admin eingeloggt ist, Löschen-Button anzeigen
             if (isAdmin()) {
                 commentDiv.querySelector(".delete-button").style.display = "inline";
             }
@@ -157,7 +239,6 @@ layout: default
         });
     }
 
-    // Kommentar löschen (Nur Admin)
     function deleteComment(index) {
         let comments = JSON.parse(localStorage.getItem("comments")) || [];
         comments.splice(index, 1);
@@ -165,23 +246,16 @@ layout: default
         loadComments();
     }
 
-    // Admin Login Funktion
     function adminLogin() {
-        const password = prompt("🔑 Admin-Passwort eingeben:");
-        if (password === "meinSuperGeheimesPasswort") { // Ändere das Passwort hier!
+        if (prompt("🔑 Admin-Passwort:") === "meinPasswort") {
             localStorage.setItem("isAdmin", "true");
-            alert("✅ Du bist jetzt als Admin eingeloggt!");
             loadComments();
-        } else {
-            alert("❌ Falsches Passwort!");
         }
     }
 
-    // Prüfen, ob Admin eingeloggt ist
     function isAdmin() {
         return localStorage.getItem("isAdmin") === "true";
     }
 
-    // Kommentare beim Laden anzeigen
     loadComments();
 </script>
