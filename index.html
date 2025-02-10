@@ -95,7 +95,7 @@ layout: default
 
 <!-- Besucherzähler -->
 <div class="visitor-counter">
-    Besucher: <img src="https://hitcounter.pythonanywhere.com/count/tag.svg" alt="Zähler">
+    Besucher: <span id="visitCount">0</span>
 </div>
 
 <script>
@@ -120,4 +120,13 @@ layout: default
             localStorage.setItem("darkMode", "enabled");
         }
     });
+
+    // Besucherzähler speichern und aktualisieren
+    let visitCount = localStorage.getItem("visitCount");
+    if (visitCount === null) {
+        visitCount = 0;
+    }
+    visitCount++;
+    localStorage.setItem("visitCount", visitCount);
+    document.getElementById("visitCount").textContent = visitCount;
 </script>
