@@ -39,5 +39,30 @@ layout: default
 <!-- YouTube Button -->
 <a href="https://youtube.com/@sirgamebot680" target="_blank" class="button youtube">📺 YouTube-Kanal</a>
 
+<button id="darkModeToggle">🌙 Dark Mode</button>
+
+<script>
+    const button = document.getElementById("darkModeToggle");
+    button.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+    });
+</script>
+
+<style>
+    body.dark {
+        background-color: #121212;
+        color: white;
+    }
+    button {
+        padding: 10px;
+        border: none;
+        background: #444;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+
 
 </ul>
