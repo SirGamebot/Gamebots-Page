@@ -10,7 +10,9 @@ layout: default
 
 <h1>Links</h1>
 <p>Hier habe ich meine ganzen Links hinzugefügt!</p>
+
 <style>
+    /* Button-Design */
     .button {
         display: inline-block;
         padding: 10px 20px;
@@ -21,15 +23,56 @@ layout: default
         border-radius: 5px;
         text-decoration: none;
         margin: 10px;
+        transition: transform 0.2s, opacity 0.2s;
     }
+
+    /* Discord & YouTube Button Farben */
     .discord {
         background-color: #5865F2; /* Discord-Blau */
     }
     .youtube {
         background-color: #FF0000; /* YouTube-Rot */
     }
+
+    /* Button Animation (Schwebender Effekt) */
     .button:hover {
-        opacity: 0.8; /* Button wird dunkler, wenn man mit der Maus drüberfährt */
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+
+    /* Dark Mode Styling */
+    body.dark {
+        background-color: #121212;
+        color: white;
+    }
+
+    /* Dark Mode Button-Styling */
+    .dark-mode-button {
+        padding: 10px 20px;
+        border: none;
+        background: #444;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    /* Dark Mode Button Animation */
+    .dark-mode-button:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+
+    /* Schwebender Text Effekt */
+    .hover-text {
+        display: inline-block;
+        transition: transform 0.2s ease-in-out;
+    }
+    .hover-text:hover {
+        transform: translateY(-5px); /* Der Text hebt sich leicht an */
+        color: #4CAF50; /* Grüner Effekt beim Hover */
     }
 </style>
 
@@ -39,47 +82,31 @@ layout: default
 <!-- YouTube Button -->
 <a href="https://youtube.com/@sirgamebot680" target="_blank" class="button youtube">📺 YouTube-Kanal</a>
 
-<button id="darkModeToggle">🌙 Dark Mode</button>
+<!-- Dark Mode Button -->
+<button id="darkModeToggle" class="dark-mode-button">🌙 Dark Mode</button>
+
+<h2 class="hover-text">🎉 Coole Animationen hinzugefügt! 🚀</h2>
 
 <script>
     const button = document.getElementById("darkModeToggle");
     const body = document.body;
 
-    // Prüft, ob Dark Mode schon aktiv ist (falls Seite neu geladen wird)
+    // Prüft, ob Dark Mode schon aktiv ist (nach Seiten-Reload)
     if (localStorage.getItem("darkMode") === "enabled") {
         body.classList.add("dark");
         button.innerHTML = "☀️ Light Mode";
     }
 
-    // Button-Event-Listener
+    // Button-Event-Listener für den Dark Mode
     button.addEventListener("click", () => {
         if (body.classList.contains("dark")) {
             body.classList.remove("dark");
             button.innerHTML = "🌙 Dark Mode";
-            localStorage.setItem("darkMode", "disabled"); // Speichert Einstellung
+            localStorage.setItem("darkMode", "disabled");
         } else {
             body.classList.add("dark");
             button.innerHTML = "☀️ Light Mode";
-            localStorage.setItem("darkMode", "enabled"); // Speichert Einstellung
+            localStorage.setItem("darkMode", "enabled");
         }
     });
 </script>
-
-<style>
-    body.dark {
-        background-color: #121212;
-        color: white;
-    }
-    button {
-        padding: 10px;
-        border: none;
-        background: #444;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
-
-
-
-</ul>
