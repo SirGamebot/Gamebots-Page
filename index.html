@@ -65,14 +65,22 @@ layout: default
         transform: scale(1.1);
     }
 
-    /* Schwebender Text Effekt */
-    .hover-text {
-        display: inline-block;
-        transition: transform 0.2s ease-in-out;
+    /* Besucherzähler Styling (klein in der Ecke) */
+    .visitor-counter {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
     }
-    .hover-text:hover {
-        transform: translateY(-5px); /* Der Text hebt sich leicht an */
-        color: #4CAF50; /* Grüner Effekt beim Hover */
+
+    /* Dark Mode für Besucherzähler */
+    body.dark .visitor-counter {
+        background: rgba(255, 255, 255, 0.8);
+        color: black;
     }
 </style>
 
@@ -85,7 +93,10 @@ layout: default
 <!-- Dark Mode Button -->
 <button id="darkModeToggle" class="dark-mode-button">🌙 Dark Mode</button>
 
-<h2 class="hover-text">🎉 Coole Animationen hinzugefügt! 🚀</h2>
+<!-- Besucherzähler -->
+<div class="visitor-counter">
+    Besucher: <img src="https://hitcounter.pythonanywhere.com/count/tag.svg" alt="Zähler">
+</div>
 
 <script>
     const button = document.getElementById("darkModeToggle");
