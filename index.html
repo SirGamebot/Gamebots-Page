@@ -43,8 +43,25 @@ layout: default
 
 <script>
     const button = document.getElementById("darkModeToggle");
+    const body = document.body;
+
+    // Prüft, ob Dark Mode schon aktiv ist (falls Seite neu geladen wird)
+    if (localStorage.getItem("darkMode") === "enabled") {
+        body.classList.add("dark");
+        button.innerHTML = "☀️ Light Mode";
+    }
+
+    // Button-Event-Listener
     button.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
+        if (body.classList.contains("dark")) {
+            body.classList.remove("dark");
+            button.innerHTML = "🌙 Dark Mode";
+            localStorage.setItem("darkMode", "disabled"); // Speichert Einstellung
+        } else {
+            body.classList.add("dark");
+            button.innerHTML = "☀️ Light Mode";
+            localStorage.setItem("darkMode", "enabled"); // Speichert Einstellung
+        }
     });
 </script>
 
